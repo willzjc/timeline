@@ -31,7 +31,7 @@ class TimelineResume {
             .attr('x1', 30)
             .attr('x2', 30)
             .attr('y1', 0)
-            .style('stroke', '#3498db')
+            .style('stroke', '#232323') // Changed fromrgb(0, 0, 0) to grey
             .style('stroke-width', '4px');
     }
     
@@ -123,6 +123,11 @@ class TimelineResume {
                 this.timelineElement.selectAll('.timeline-item').classed('drag-over', false);
             });
         
+        // Add connector arrow from content to dot
+        timelineContent.append('div')
+            .attr('class', 'timeline-arrow')
+            .attr('title', 'Connection to timeline');
+            
         // Add drag handle
         timelineContent.append('div')
             .attr('class', 'drag-handle')
@@ -183,7 +188,7 @@ class TimelineResume {
     
     addNewCardPlaceholder() {
         const newCardItem = this.timelineElement.append('div')
-            .attr('class', 'timeline-item')
+            .attr('class', 'timeline-item new-card-item')  // Added "new-card-item" class
             .style('margin-bottom', '30px');
             
         newCardItem.append('div')
@@ -192,6 +197,11 @@ class TimelineResume {
         const newCard = newCardItem.append('div')
             .attr('class', 'timeline-content new-card')
             .on('click', () => this.createNewJob());
+            
+        // Add connector arrow for new card
+        newCard.append('div')
+            .attr('class', 'timeline-arrow')
+            .attr('title', 'Connection to timeline');
             
         newCard.append('div')
             .attr('class', 'new-card-icon')
@@ -225,6 +235,11 @@ class TimelineResume {
         const card = this.timelineElement.select(`.timeline-content[data-index="${index}"]`);
         card.html(''); // Clear the current content
         card.classed('edit-mode', true);
+        
+        // Add connector arrow back since we cleared the content
+        card.append('div')
+            .attr('class', 'timeline-arrow')
+            .attr('title', 'Connection to timeline');
         
         // Create edit form
         const form = card.append('form')

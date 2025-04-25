@@ -61,7 +61,7 @@ body {
 /* Timeline line positioning */
 .timeline-line {
   position: absolute;
-  background-color: #3498db;
+  background-color: #232323; /* Changed from #3498db to grey */
   width: 4px;
   top: 0;
   bottom: 0;
@@ -75,13 +75,23 @@ body {
   position: absolute;
   width: 16px;
   height: 16px;
-  background-color: #3498db;
+  background-color: #232323; /* Changed from #343434 to match line color */
   border-radius: 50%;
   left: -50px; /* Match exactly with timeline line left position */
   transform: translateX(-50%); /* Center the dot on the line */
   top: 15px;
   z-index: 2;
   border: 2px solid white;
+}
+
+/* Hide dot on new card item */
+.timeline-item:has(.new-card) .timeline-dot {
+  display: none;
+}
+
+/* For browsers that don't support :has() */
+.new-card-item .timeline-dot {
+  display: none;
 }
 
 /* Card content styling */
@@ -470,4 +480,22 @@ button:hover {
   .timeline-content {
     margin-left: 20px;
   }
+}
+
+.timeline-arrow {
+  position: absolute;
+  left: -15px; /* Moved further left to account for larger size */
+  top: 15px; /* Position at the top to align with the dot */
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent; /* Increased from 8px */
+  border-bottom: 12px solid transparent; /* Increased from 8px */
+  border-right: 15px solid #fff; /* Increased from 10px */
+  z-index: 2;
+  /* Add shadow to match the card */
+  filter: drop-shadow(-3px 0px 2px rgba(0, 0, 0, 0.1));
+}
+
+.timeline-content {
+  position: relative;
 }
