@@ -6,16 +6,19 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
   max-width: 1000px;
   margin: 0 auto;
+  overflow-x: hidden; /* Prevent horizontal overflow */
   min-height: 500px;
 }
 
 /* TIMELINE AXIS AND VISUAL ELEMENTS */
 .timeline-axis {
   width: 60px;
-  /* Remove fixed percentage height, JS will set pixel height */
   flex-shrink: 0;
   position: relative;
-  min-height: 500px; /* Ensure minimum height */
+  transition: height 0.3s ease;
+  min-height: 300px;
+  height: auto; /* Will be set by JavaScript */
+  overflow: hidden; /* Prevent any potential overflow */
 }
 
 .timeline-axis::before {
@@ -23,12 +26,12 @@
   position: absolute;
   /* Adjust top to align with the center of the dot (dot top: 20px, dot height+border: 16px -> center at 20 + 16/2 = 28px) */
   top: 28px;
-  /* Make the gradient extend closer to the bottom */
-  bottom: 10px; /* Adjust as needed */
+  /* Make the gradient extend much closer to the bottom */
+  bottom: 0; /* Changed from 10px to 0 to extend all the way */
   left: 50%;
   width: 3px;
-  /* Use a linear gradient for the fade effect */
-  background: linear-gradient(to bottom, #343434 70%, rgba(52, 52, 52, 0)); /* Fade closer to the end */
+  /* Adjust gradient to fade only at the very end */
+  background: linear-gradient(to bottom, #343434 85%, rgba(52, 52, 52, 0)); /* Increased from 90% to 95% */
   transform: translateX(-50%);
   border-radius: 2px; /* Optional: slightly rounded ends */
 }
@@ -62,7 +65,11 @@
   flex-grow: 1;
   margin-left: 20px;
   position: relative;
-  padding-bottom: 50px; /* Extra padding at bottom */
+  padding-bottom: 20px;
+  /* box-sizing: border-box; */
+  /* Prevent the timeline elements from growing with scroll interactions */
+  max-height: none; /* Remove any max-height constraints */
+  overflow: visible;
 }
 
 .timeline-item {
@@ -73,7 +80,7 @@
 }
 
 .timeline-item:last-child {
-  margin-bottom: 50px;
+  margin-bottom: 20px; /* Reduced margin on last item */
 }
 
 /* Make the dot move when hovering over the timeline item */

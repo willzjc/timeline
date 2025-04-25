@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import '../styles/Timeline.css';
 
 function TimelineResume({ onShowMap, jobs, setJobs }) {
@@ -8,64 +8,27 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
   const containerRef = useRef(null);
   const axisRef = useRef(null);
   const timelineElementRef = useRef(null);
+  
+  // Simple calculation based on number of jobs with more padding
+  const calculateAxisHeight = useCallback(() => {
+    // Each job card ~ 200px + spacing between cards + buffer at end
+    const baseHeight = 500; // Increased minimum height (was 300)
+    const itemHeight = 280; // Increased height per item with spacing (was 220)
+    const bottomPadding = 150; // Significantly more space at bottom (was 5)
+    return Math.max(baseHeight, (jobs.length + 1) * itemHeight + bottomPadding);
+  }, [jobs.length]);
+  
+  // Update axis height only when jobs array length changes
+  useEffect(() => {
+    if (!axisRef.current) return;
+    
+    // Set fixed height based on number of items
+    const height = calculateAxisHeight();
+    axisRef.current.style.height = `${height}px`;
+  }, [jobs.length, calculateAxisHeight]); // Only recalculate when job count changes
 
   const handleShowMap = (location) => {
     onShowMap(location);
-
-    setTimeout(() => {
-      updateTimelineHeight();
-    }, 200);
-  };
-
-  useEffect(() => {
-    if (!axisRef.current || !timelineElementRef.current) return;
-
-    const handleResize = () => {
-      updateTimelineHeight();
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    const resizeObserver = new ResizeObserver(() => {
-      updateTimelineHeight();
-    });
-
-    if (timelineElementRef.current) {
-      resizeObserver.observe(timelineElementRef.current);
-    }
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      resizeObserver.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      updateTimelineHeight();
-    }, 100);
-
-    const handleLayoutChange = () => {
-      setTimeout(updateTimelineHeight, 100);
-    };
-
-    window.addEventListener('resize', handleLayoutChange);
-    document.addEventListener('click', handleLayoutChange);
-
-    return () => {
-      window.removeEventListener('resize', handleLayoutChange);
-      document.removeEventListener('click', handleLayoutChange);
-    };
-  }, [jobs]);
-
-  const updateTimelineHeight = () => {
-    if (!axisRef.current || !timelineElementRef.current) return;
-
-    const elementsHeight = timelineElementRef.current.scrollHeight;
-    const timelineHeight = Math.max(elementsHeight, 300);
-
-    axisRef.current.style.height = `${timelineHeight}px`;
   };
 
   const formatDate = (dateString) => {
@@ -73,10 +36,6 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
     const date = new Date(dateString);
     const options = { year: 'numeric', month: 'short' };
     return date.toLocaleDateString('en-US', options);
-  };
-
-  const addJob = (job) => {
-    setJobs([...jobs, job]);
   };
 
   const createNewJob = () => {
@@ -104,8 +63,6 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
     updatedJobs[index] = { ...updatedJobs[index], ...updatedJob };
     setJobs(updatedJobs);
     setEditingIndex(null);
-
-    setTimeout(updateTimelineHeight, 100);
   };
 
   const cancelEdit = (index) => {
@@ -114,7 +71,6 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
       updatedJobs.pop();
       setJobs(updatedJobs);
     }
-
     setEditingIndex(null);
   };
 
