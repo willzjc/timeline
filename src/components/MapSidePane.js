@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CONFIG from '../config';
 import './MapSidePane.css';
 
@@ -14,6 +14,16 @@ function MapSidePane({ location, onClose }) {
     : `https://maps.google.com/maps?q=${encodeURIComponent(
         location
       )}&output=embed`;
+  
+  // Add class to body when map is open to enable the side-by-side layout
+  useEffect(() => {
+    document.body.classList.add('map-open');
+    
+    // Clean up function to remove class when component unmounts
+    return () => {
+      document.body.classList.remove('map-open');
+    };
+  }, []);
 
   return (
     <div id="map-side-pane" className="map-side-pane">

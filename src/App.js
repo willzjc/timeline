@@ -33,25 +33,26 @@ function App() {
   };
 
   return (
-    <div className={`app-container ${mapLocation ? 'map-open' : ''}`}>
-      <div className="container">
-        <h1 className="animated-title">Timeline Resume</h1>
-        <TimelineResume 
-          onShowMap={showMapSidePane}
-          jobs={jobs}
-          setJobs={setJobs}
-        />
-        <div id="details-panel" className="hidden">
-          {/* <button className="close-btn"><i className="fas fa-times"></i></button> */}
-          <div id="details-content"></div>
+    <div className={`app-container ${mapLocation ? 'with-sidemap' : ''}`}>
+      <div className="main-content">
+        <div className="container">
+          <h1 className="animated-title">Timeline Resume</h1>
+          <TimelineResume 
+            onShowMap={showMapSidePane}
+            jobs={jobs}
+            setJobs={setJobs}
+          />
+          <div id="details-panel" className="hidden">
+            <div id="details-content"></div>
+          </div>
         </div>
       </div>
       
       {mapLocation && (
-        <>
-          <div className="map-overlay" onClick={closeMapSidePane}></div>
+        <div className="map-side-container">
+          <button className="close-map-btn" onClick={closeMapSidePane}>×</button>
           <MapSidePane location={mapLocation} onClose={closeMapSidePane} />
-        </>
+        </div>
       )}
     </div>
   );
