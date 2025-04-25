@@ -12,7 +12,7 @@
 /* TIMELINE AXIS AND VISUAL ELEMENTS */
 .timeline-axis {
   width: 60px;
-  height: 100%;
+  /* Remove fixed percentage height, JS will set pixel height */
   flex-shrink: 0;
   position: relative;
   min-height: 500px; /* Ensure minimum height */
@@ -22,30 +22,37 @@
   content: '';
   position: absolute;
   top: 10px;
-  bottom: 30px;
+  /* Make the gradient extend closer to the bottom */
+  bottom: 10px; /* Adjust as needed */
   left: 50%;
   width: 3px;
-  background-color: #343434;
+  /* Use a linear gradient for the fade effect */
+  background: linear-gradient(to bottom, #343434 90%, rgba(52, 52, 52, 0)); /* Fade closer to the end */
   transform: translateX(-50%);
-}
-
-.timeline-line {
-  stroke: #343434;
-  stroke-width: 3px;
-  height: 100%;
+  border-radius: 2px; /* Optional: slightly rounded ends */
 }
 
 .timeline-dot {
   position: absolute;
+  /* left: -58px; Let's recalculate: axis width 60px, line at 30px. elements margin-left 20px.
+     Dot center should align with line center (30px inside axis).
+     Dot position relative to timeline-item start.
+     timeline-item starts 20px (margin) + 60px (axis) = 80px from container left.
+     Axis line is at 30px from container left.
+     Dot needs to be 30px from container left.
+     Dot left = 30px (target) - 80px (item start) = -50px.
+     Adjust for dot width (12px + 2*2px border = 16px). Half is 8px.
+     So, left: -50px - 8px = -58px. The original value seems correct.
+  */
   left: -58px;
-  top: 20px;
+  /* top: 20px; This positions the dot relative to the top of the timeline-item */
+  top: 20px; /* Adjust this value if needed to align vertically with content */
   width: 12px;
   height: 12px;
   background-color: white;
   border-radius: 50%;
   border: 2px solid #343434;
   z-index: 2;
-  /* Add transition for smooth animation of the dot */
   transition: transform 0.3s ease;
 }
 
@@ -145,6 +152,12 @@
   word-wrap: break-word;
   hyphens: auto;
   white-space: pre-line;
+}
+
+/* Add a specific style for the dot associated with the new card item if needed */
+.new-card-item .timeline-dot {
+  /* Hide or style differently if it shouldn't appear */
+  display: none;
 }
 
 /* CARD INTERACTIONS */
