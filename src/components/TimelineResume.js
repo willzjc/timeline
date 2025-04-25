@@ -1,31 +1,23 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/Timeline.css';
 
 function TimelineResume({ onShowMap, jobs, setJobs }) {
   const [editingIndex, setEditingIndex] = useState(null);
   const [draggedItemIndex, setDraggedItemIndex] = useState(null);
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
 
   const containerRef = useRef(null);
   const axisRef = useRef(null);
   const timelineElementRef = useRef(null);
-  
-  // Simple calculation based on number of jobs with more padding
-  const calculateAxisHeight = useCallback(() => {
-    // Each job card ~ 200px + spacing between cards + buffer at end
-    const baseHeight = 500; // Increased minimum height (was 300)
-    const itemHeight = 280; // Increased height per item with spacing (was 220)
-    const bottomPadding = 150; // Significantly more space at bottom (was 5)
-    return Math.max(baseHeight, (jobs.length + 1) * itemHeight + bottomPadding);
-  }, [jobs.length]);
-  
-  // Update axis height only when jobs array length changes
+
   useEffect(() => {
-    if (!axisRef.current) return;
-    
-    // Set fixed height based on number of items
-    const height = calculateAxisHeight();
-    axisRef.current.style.height = `${height}px`;
-  }, [jobs.length, calculateAxisHeight]); // Only recalculate when job count changes
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleShowMap = (location) => {
     onShowMap(location);
@@ -112,7 +104,7 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
   };
 
   return (
-    <div ref={containerRef} id="timeline-container" className="timeline-resume-container">
+    <div ref={containerRef} id="timeline-container" className={`timeline-resume-container ${isMobileView ? 'mobile-view' : ''}`}>
       <div ref={axisRef} className="timeline-axis">
       </div>
 
@@ -120,7 +112,7 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
         {jobs.map((job, index) => (
           <div
             key={job.id || index}
-            className={`timeline-item job-item ${draggedItemIndex === index ? 'dragging' : ''}`}
+            className={`timeline-item job-item ${draggedItemIndex === index ? 'dragging' : ''} ${isMobileView ? 'mobile' : ''}`}
             data-index={index}
             onDragOver={(e) => e.preventDefault()}
             onDragEnter={(e) => {
@@ -139,7 +131,7 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
 
             {editingIndex === index ? (
               <div className="timeline-content edit-mode">
-                <div className="timeline-arrow"></div>
+                {!isMobileView && <div className="timeline-arrow"></div>}
                 <form className="edit-form" onSubmit={(e) => {
                   e.preventDefault();
                   const formData = new FormData(e.target);
@@ -251,7 +243,7 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
                 onDragStart={(e) => handleDragStart(e, index)}
                 onDragEnd={() => setDraggedItemIndex(null)}
               >
-                <div className="timeline-arrow"></div>
+                {!isMobileView && <div className="timeline-arrow"></div>}
                 <div className="drag-handle" title="Drag to reorder"></div>
 
                 <div className="card-actions">
