@@ -21,13 +21,14 @@
 .timeline-axis::before {
   content: '';
   position: absolute;
-  top: 10px;
+  /* Adjust top to align with the center of the dot (dot top: 20px, dot height+border: 16px -> center at 20 + 16/2 = 28px) */
+  top: 28px;
   /* Make the gradient extend closer to the bottom */
   bottom: 10px; /* Adjust as needed */
   left: 50%;
   width: 3px;
   /* Use a linear gradient for the fade effect */
-  background: linear-gradient(to bottom, #343434 90%, rgba(52, 52, 52, 0)); /* Fade closer to the end */
+  background: linear-gradient(to bottom, #343434 70%, rgba(52, 52, 52, 0)); /* Fade closer to the end */
   transform: translateX(-50%);
   border-radius: 2px; /* Optional: slightly rounded ends */
 }
