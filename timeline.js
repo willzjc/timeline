@@ -183,7 +183,11 @@ class TimelineResume {
         // Add location
         container.append('div')
             .attr('class', 'timeline-location')
-            .html(d => `<i class="fas fa-map-marker-alt"></i> ${d.location}`);
+            .html(d => `${d.location}`)
+            .on('click', (event, d) => {
+                event.stopPropagation();
+                this.showMapSidePane(d.location);
+            });
             
         // Add responsibilities
         container.append('div')
@@ -410,5 +414,88 @@ class TimelineResume {
         } else {
             document.getElementById('location-info').classList.add('hidden');
         }
+    }
+
+    // Initialize the map side pane
+    initMapSidePane() {
+        // Create map side pane if it doesn't exist
+        if (!document.getElementById('map-side-pane')) {
+            const mapPane = document.createElement('div');
+            mapPane.id = 'map-side-pane';
+            mapPane.innerHTML = `
+                <div class="map-header">
+                    <h3 class="map-title">Location</h3>
+                    <button class="map-close-btn">&times;</button>
+                </div>
+                <div id="map-container"></div>
+            `;
+            
+            document.body.appendChild(mapPane);
+            
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'map-overlay';
+            document.body.appendChild(overlay);
+            
+            // Add event listener for close button
+            document.querySelector('.map-close-btn').addEventListener('click', () => {
+                this.closeMapSidePane();
+            });
+            
+            // Close on overlay click
+            overlay.addEventListener('click', () => {
+                this.closeMapSidePane();
+            });
+        }
+    }
+
+    // Show the map side pane with the specified location
+    showMapSidePane(location) {
+        // Make sure the side pane exists
+        this.initMapSidePane();
+        
+        // Update the map title
+        document.querySelector('.map-title').textContent = location;
+        
+        // Show the side pane and overlay
+        document.getElementById('map-side-pane').classList.add('open');
+        document.querySelector('.map-overlay').classList.add('active');
+        document.querySelector('.container').classList.add('map-open');
+        
+        // Load Google Map
+        this.loadGoogleMap(location);
+    }
+    
+    // Close the map side pane
+    closeMapSidePane() {
+        document.getElementById('map-side-pane').classList.remove('open');
+        document.querySelector('.map-overlay').classList.remove('active');
+        document.querySelector('.container').classList.remove('map-open');
+    }
+    
+    // Load Google Map with the given location
+    loadGoogleMap(location) {
+        const mapContainer = document.getElementById('map-container');
+        
+        // Get API key from config file
+        const apiKey = typeof CONFIG !== 'undefined' && CONFIG.GOOGLE_MAPS_API_KEY ? 
+                       CONFIG.GOOGLE_MAPS_API_KEY : '';
+                       
+        // If no API key is available, use the keyless embed version
+        const mapSrc = apiKey ? 
+            `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(location)}` :
+            `https://maps.google.com/maps?q=${encodeURIComponent(location)}&output=embed`;
+        
+        // Create an iframe with Google Maps embed
+        mapContainer.innerHTML = `
+            <iframe 
+                width="100%" 
+                height="100%" 
+                frameborder="0" 
+                style="border:0" 
+                src="${mapSrc}" 
+                allowfullscreen>
+            </iframe>
+        `;
     }
 }

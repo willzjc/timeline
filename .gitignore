@@ -54,3 +54,6 @@ logs/
 
 # Optional: test coverage
 coverage/
+
+# Configuration with sensitive data
+config.js
