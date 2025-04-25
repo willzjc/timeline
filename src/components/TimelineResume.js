@@ -12,6 +12,16 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
   const timelineElementRef = useRef(null);
   const timelineElementsRef = useRef(null);
   
+  // Enhanced version of onShowMap that updates the timeline after map is shown
+  const handleShowMap = (location) => {
+    onShowMap(location);
+    
+    // After map is shown, update the timeline with a small delay
+    setTimeout(() => {
+      updateTimelineHeight();
+    }, 200);
+  };
+
   // Initialize the timeline structure
   useEffect(() => {
     if (!svgRef.current || !timelineElementRef.current) return;
@@ -48,7 +58,7 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
     };
   }, []);
   
-  // Update the timeline whenever jobs change
+  // Update the timeline whenever jobs change or when the window is resized
   useEffect(() => {
     updateTimeline();
     
@@ -56,6 +66,19 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
     setTimeout(() => {
       updateTimelineHeight();
     }, 100);
+    
+    // Add an event listener for when the MapSidePane might affect layout
+    const handleLayoutChange = () => {
+      setTimeout(updateTimelineHeight, 100);
+    };
+    
+    window.addEventListener('resize', handleLayoutChange);
+    document.addEventListener('click', handleLayoutChange);
+    
+    return () => {
+      window.removeEventListener('resize', handleLayoutChange);
+      document.removeEventListener('click', handleLayoutChange);
+    };
   }, [jobs]);
   
   // Helper function to update timeline dimensions
@@ -99,6 +122,8 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
   
   // Draw the timeline vertical line with the accurate height
   const drawTimelineLine = (height) => {
+    if (!svgRef.current) return;
+    
     const svg = d3.select(svgRef.current);
     svg.select(".timeline-line").remove();
     
@@ -371,7 +396,7 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
                     className="timeline-location"
                     onClick={(e) => {
                       e.stopPropagation();
-                      onShowMap(job.location);
+                      handleShowMap(job.location);
                     }}
                   >
                     {job.location}

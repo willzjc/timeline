@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 // Update the import path for the CSS file
-import './styles/index.css';
 import App from './App';
 
 // Create a config object if config.js is not available
