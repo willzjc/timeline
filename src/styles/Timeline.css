@@ -13,11 +13,24 @@
   width: 60px;
   height: 100%;
   flex-shrink: 0;
+  position: relative;
+}
+
+.timeline-axis::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 30px;
+  left: 50%;
+  width: 3px;
+  background-color: #343434;
+  transform: translateX(-50%);
 }
 
 .timeline-line {
   stroke: #343434;
   stroke-width: 3px;
+  height: 100%;
 }
 
 .timeline-dot {
@@ -36,6 +49,8 @@
 .timeline-elements {
   flex-grow: 1;
   margin-left: 20px;
+  position: relative;
+  padding-bottom: 30px;
 }
 
 .timeline-item {
@@ -50,6 +65,10 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: relative;
   transition: all 0.3s ease;
+  height: auto;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
 }
 
 .timeline-arrow {
@@ -94,6 +113,11 @@
 .timeline-responsibilities {
   color: #555;
   line-height: 1.5;
+  flex-grow: 1;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  white-space: pre-line;
 }
 
 /* CARD INTERACTIONS */
@@ -253,6 +277,14 @@
   .timeline-axis {
     height: 30px;
     width: 100%;
+  }
+  
+  .timeline-axis::before {
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    height: 100%;
+    width: 3px;
   }
   
   .timeline-elements {

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import CONFIG from '../config';
-import './MapSidePane.css';
+import '../styles/MapSidePane.css';
 
 function MapSidePane({ location, onClose }) {
   // Get API key from config file
