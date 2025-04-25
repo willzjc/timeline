@@ -58,15 +58,30 @@ body {
   margin-bottom: 30px;
 }
 
-/* Timeline dot positioning */
+/* Timeline line positioning */
+.timeline-line {
+  position: absolute;
+  background-color: #3498db;
+  width: 4px;
+  top: 0;
+  bottom: 0;
+  left: 30px;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Timeline dot positioning - precisely on the line */
 .timeline-dot {
   position: absolute;
   width: 16px;
   height: 16px;
   background-color: #3498db;
   border-radius: 50%;
-  left: -28px; /* Position dot to align with timeline */
-  top: 0; /* Align with top of card */
+  left: -50px; /* Match exactly with timeline line left position */
+  transform: translateX(-50%); /* Center the dot on the line */
+  top: 15px;
+  z-index: 2;
+  border: 2px solid white;
 }
 
 /* Card content styling */
@@ -164,16 +179,6 @@ button:hover {
 .timeline-axis text {
   fill: var(--text-color);
   font-size: 12px;
-}
-
-.timeline-line {
-  position: absolute;
-  background-color: #3498db;
-  width: 4px;
-  top: 0;
-  bottom: 0;
-  left: 30px;
-  height: 100%;
 }
 
 .timeline-content.edit-mode {
