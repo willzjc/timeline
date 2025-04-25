@@ -1,3 +1,5 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
 # Dependencies
 node_modules/
 npm-debug.log
@@ -5,11 +7,14 @@ yarn-error.log
 yarn-debug.log
 package-lock.json
 yarn.lock
+/.pnp
+.pnp.js
 
 # Build outputs
 dist/
 build/
 .cache/
+/build
 
 # Environment variables
 .env
@@ -54,6 +59,8 @@ logs/
 
 # Optional: test coverage
 coverage/
+/coverage
 
-# Configuration with sensitive data
-config.js
+# Create a separate config file for env variables
+# Instead of ignoring config.js completely
+src/config.example.js
