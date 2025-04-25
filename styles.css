@@ -61,8 +61,9 @@ body {
 /* Timeline line positioning */
 .timeline-line {
   position: absolute;
-  background-color: #232323; /* Changed from #3498db to grey */
-  width: 4px;
+  background-color: #ccc; /* Light grey color */
+  width: 1px; /* Make the line thinner */
+  stroke-width: 2px;
   top: 0;
   bottom: 0;
   left: 30px;
@@ -73,15 +74,16 @@ body {
 /* Timeline dot positioning - precisely on the line */
 .timeline-dot {
   position: absolute;
-  width: 16px;
-  height: 16px;
-  background-color: #232323; /* Changed from #343434 to match line color */
+  width: 14px; /* Slightly smaller dot */
+  height: 14px; /* Slightly smaller dot */
+  background-color: white; /* Hollow center */
   border-radius: 50%;
-  left: -50px; /* Match exactly with timeline line left position */
+  border: 2px solid #ccc; /* Thin grey outline, matching line */
+  left: -50px; /* Align with the center of the new thinner line */
   transform: translateX(-50%); /* Center the dot on the line */
-  top: 15px;
+  top: 15px; /* Adjust vertical position as needed */
   z-index: 2;
-  border: 2px solid white;
+  /* Removed the previous white border */
 }
 
 /* Hide dot on new card item */

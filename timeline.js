@@ -31,8 +31,6 @@ class TimelineResume {
             .attr('x1', 30)
             .attr('x2', 30)
             .attr('y1', 0)
-            .style('stroke', '#232323') // Changed fromrgb(0, 0, 0) to grey
-            .style('stroke-width', '4px');
     }
     
     addJob(job) {
@@ -56,17 +54,13 @@ class TimelineResume {
         // Clear existing timeline
         this.timelineElement.html('');
         
-        // Add the "new card" placeholder
-        this.addNewCardPlaceholder();
-        
-        // Set the height of the SVG based on content
-        const timelineHeight = Math.max((this.jobs.length + 1) * 150 + 100, 300);
+        // Set the height of the SVG based on content (jobs + 1 for the placeholder)
+        const timelineHeight = Math.max((this.jobs.length + 1) * 150 + 100, 300); // Adjust multiplier if needed
         this.svg.attr('height', timelineHeight);
-        
-        // Update the vertical line
-        this.svg.select('.timeline-line')
-            .attr('y2', timelineHeight);
-            
+
+        // Update the vertical line (draws based on SVG height)
+        this.drawTimelineLine();
+
         // Create timeline items for existing jobs
         const timelineItems = this.timelineElement.selectAll('.timeline-item.job-item')
             .data(this.jobs)
@@ -96,12 +90,12 @@ class TimelineResume {
                 this.handleDrop(targetIndex);
                 d3.select(event.currentTarget).classed('drag-over', false);
             });
-            
-        // Add timeline dots to each item
+
+        // Add timeline dots to each job item
         timelineItems.append('div')
             .attr('class', 'timeline-dot');
-            
-        // Create content cards
+
+        // Create content cards for jobs
         const timelineContent = timelineItems.append('div')
             .attr('class', 'timeline-content draggable')
             .attr('data-index', (d, i) => i)
@@ -122,21 +116,21 @@ class TimelineResume {
                 // Remove drag-over class from all items
                 this.timelineElement.selectAll('.timeline-item').classed('drag-over', false);
             });
-        
-        // Add connector arrow from content to dot
+
+        // Add connector arrow from content to dot for jobs
         timelineContent.append('div')
             .attr('class', 'timeline-arrow')
             .attr('title', 'Connection to timeline');
-            
-        // Add drag handle
+
+        // Add drag handle for jobs
         timelineContent.append('div')
             .attr('class', 'drag-handle')
             .attr('title', 'Drag to reorder');
-            
-        // Add action buttons
+
+        // Add action buttons for jobs
         const cardActions = timelineContent.append('div')
             .attr('class', 'card-actions');
-            
+
         cardActions.append('button')
             .attr('class', 'edit-btn')
             .html('✏️')
@@ -146,7 +140,7 @@ class TimelineResume {
                 const index = parseInt(d3.select(event.currentTarget.parentNode.parentNode).attr('data-index'));
                 this.editJob(index);
             });
-            
+
         cardActions.append('button')
             .attr('class', 'delete-btn')
             .html('🗑️')
@@ -156,9 +150,12 @@ class TimelineResume {
                 const index = parseInt(d3.select(event.currentTarget.parentNode.parentNode).attr('data-index'));
                 this.deleteJob(index);
             });
-        
+
         // Add job info (when not in edit mode)
         this.renderJobContent(timelineContent);
+
+        // Add the "new card" placeholder AT THE BOTTOM
+        this.addNewCardPlaceholder();
     }
     
     renderJobContent(container) {
@@ -196,26 +193,18 @@ class TimelineResume {
     }
     
     addNewCardPlaceholder() {
-        const newCardItem = this.timelineElement.append('div')
-            .attr('class', 'timeline-item new-card-item')  // Added "new-card-item" class
-            .style('margin-bottom', '30px');
-            
-        newCardItem.append('div')
-            .attr('class', 'timeline-dot');
-            
+        const newCardItem = this.timelineElement.append('div') // Appends to the end of timelineElement
+            .attr('class', 'timeline-item new-card-item')
+            .style('margin-bottom', '30px'); // Keep consistent spacing
+
         const newCard = newCardItem.append('div')
             .attr('class', 'timeline-content new-card')
             .on('click', () => this.createNewJob());
-            
-        // Add connector arrow for new card
-        newCard.append('div')
-            .attr('class', 'timeline-arrow')
-            .attr('title', 'Connection to timeline');
-            
+
         newCard.append('div')
             .attr('class', 'new-card-icon')
             .html('+');
-            
+
         newCard.append('div')
             .attr('class', 'new-card-text')
             .text('Add new job entry');
@@ -232,9 +221,9 @@ class TimelineResume {
             location: '' // Added location property
         };
         
-        this.jobs.unshift(newJob);
+        this.jobs.push(newJob);
         this.updateTimeline();
-        this.editJob(0); // Edit the first job (newly added)
+        this.editJob(this.jobs.length - 1); // Edit the last job (newly added)
     }
     
     editJob(index) {
@@ -401,6 +390,28 @@ class TimelineResume {
         
         // Update the timeline
         this.updateTimeline();
+    }
+
+    drawTimelineLine() {
+        // Filter out the "add new entry" card
+        const actualCards = this.jobs.filter(d => !d.isAddNewCard);
+
+        // Remove existing timeline line if any
+        this.svg.select(".timeline-line").remove();
+
+        // Draw the timeline line only if there are actual cards
+        if (actualCards.length > 0) {
+            const firstCard = actualCards[0];
+            const lastCard = actualCards[actualCards.length - 1];
+            const lastDate = lastCard.endDate ? new Date(lastCard.endDate) : new Date(lastCard.startDate);
+
+            this.svg.append("line")
+                .attr("class", "timeline-line")
+                .attr("x1", 30)
+                .attr("y1", 0)
+                .attr("x2", 30)
+                .attr("y2", this.svg.attr('height'))
+        }
     }
 
     showJobDetails(job) {
