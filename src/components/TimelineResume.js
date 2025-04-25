@@ -1,28 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import './TimelineResume.css';
+// Update the CSS import path
+import '../styles/Timeline.css';
 
-function TimelineResume({ onShowMap }) {
-  const [jobs, setJobs] = useState([]);
+function TimelineResume({ onShowMap, jobs, setJobs }) {
   const [editingIndex, setEditingIndex] = useState(null);
   const [draggedItemIndex, setDraggedItemIndex] = useState(null);
   
   const containerRef = useRef(null);
   const svgRef = useRef(null);
   const timelineElementRef = useRef(null);
-  
-  // Load any existing jobs from localStorage on mount
-  useEffect(() => {
-    const savedJobs = localStorage.getItem('timelineJobs');
-    if (savedJobs) {
-      setJobs(JSON.parse(savedJobs));
-    }
-  }, []);
-  
-  // Save jobs to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('timelineJobs', JSON.stringify(jobs));
-  }, [jobs]);
   
   // Initialize the timeline structure
   useEffect(() => {

@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import TimelineItem from './TimelineItem';
 import EditForm from './EditForm';
 import NewCardPlaceholder from './NewCardPlaceholder';
-import './Timeline.css';
+import '../styles/Timeline.css';
 
 function Timeline({ jobs, onAddJob, onUpdateJob, onDeleteJob, onReorderJobs, onShowJobDetails, onShowMap }) {
   const [editingIndex, setEditingIndex] = useState(null);

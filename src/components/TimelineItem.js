@@ -11,7 +11,6 @@ function TimelineItem({ job, formatDate, onEdit, onDelete, onShowDetails, onShow
       onDragEnd={onDragEnd}
     >
       <div className="timeline-arrow"></div>
-      <div className="drag-handle" title="Drag to reorder"></div>
       
       <div className="card-actions">
         <button className="edit-btn" title="Edit" onClick={onEdit}>✏️</button>

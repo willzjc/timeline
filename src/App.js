@@ -1,10 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import TimelineResume from './components/TimelineResume';
 import MapSidePane from './components/MapSidePane';
-import './App.css';
+import sampleJobs from './data/sampleJobs';
+import './styles/App.css';
 
 function App() {
   const [mapLocation, setMapLocation] = useState(null);
+  const [jobs, setJobs] = useState([]);
+
+  // Load jobs from localStorage or use sample jobs if none exist
+  useEffect(() => {
+    const savedJobs = localStorage.getItem('timelineJobs');
+    if (savedJobs && JSON.parse(savedJobs).length > 0) {
+      setJobs(JSON.parse(savedJobs));
+    } else {
+      // Use sample jobs as default data
+      setJobs(sampleJobs);
+    }
+  }, []);
+
+  // Save jobs to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('timelineJobs', JSON.stringify(jobs));
+  }, [jobs]);
 
   const showMapSidePane = (location) => {
     setMapLocation(location);
@@ -18,16 +36,13 @@ function App() {
     <div className={`app-container ${mapLocation ? 'map-open' : ''}`}>
       <div className="container">
         <h1 className="animated-title">Timeline Resume</h1>
-        <div className="controls">
-          <button id="zoom-in"><i className="fas fa-search-plus"></i></button>
-          <button id="zoom-out"><i className="fas fa-search-minus"></i></button>
-          <button id="reset-view"><i className="fas fa-sync"></i></button>
-        </div>
         <TimelineResume 
           onShowMap={showMapSidePane}
+          jobs={jobs}
+          setJobs={setJobs}
         />
         <div id="details-panel" className="hidden">
-          <button className="close-btn"><i className="fas fa-times"></i></button>
+          {/* <button className="close-btn"><i className="fas fa-times"></i></button> */}
           <div id="details-content"></div>
         </div>
       </div>
