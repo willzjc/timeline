@@ -407,23 +407,9 @@ button:hover {
   opacity: 1;
 }
 
+/* Remove the controls section that contains the non-functional buttons */
 .controls {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.controls button {
-  margin: 0 5px;
-  padding: 8px 12px;
-  background: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.controls button:hover {
-  background: #e8e8e8;
+  display: none; /* Changed from flex to none to hide the controls */
 }
 
 #details-panel {
@@ -485,7 +471,7 @@ button:hover {
 .timeline-arrow {
   position: absolute;
   left: -15px; /* Moved further left to account for larger size */
-  top: 15px; /* Position at the top to align with the dot */
+  top: 10px; /* Position at the top to align with the dot */
   width: 0;
   height: 0;
   border-top: 12px solid transparent; /* Increased from 8px */
