@@ -180,6 +180,11 @@ class TimelineResume {
             .attr('class', 'timeline-company')
             .text(d => d.company);
             
+        // Add location
+        container.append('div')
+            .attr('class', 'timeline-location')
+            .html(d => `<i class="fas fa-map-marker-alt"></i> ${d.location}`);
+            
         // Add responsibilities
         container.append('div')
             .attr('class', 'timeline-responsibilities')
@@ -219,7 +224,8 @@ class TimelineResume {
             responsibilities: '',
             startDate: '',
             endDate: '',
-            currentJob: false
+            currentJob: false,
+            location: '' // Added location property
         };
         
         this.jobs.unshift(newJob);
@@ -310,6 +316,14 @@ class TimelineResume {
             .attr('for', `current-job-${index}`)
             .text('Current Job');
             
+        // Location
+        const locationGroup = form.append('div').attr('class', 'form-group');
+        locationGroup.append('label').attr('for', `location-${index}`).text('Location:');
+        locationGroup.append('input')
+            .attr('type', 'text')
+            .attr('id', `location-${index}`)
+            .attr('value', job.location);
+            
         // Action buttons
         const actions = form.append('div').attr('class', 'edit-actions');
         actions.append('button')
@@ -333,6 +347,7 @@ class TimelineResume {
         job.startDate = document.getElementById(`start-date-${index}`).value;
         job.currentJob = document.getElementById(`current-job-${index}`).checked;
         job.endDate = job.currentJob ? null : document.getElementById(`end-date-${index}`).value;
+        job.location = document.getElementById(`location-${index}`).value;
         
         this.editingIndex = null;
         
@@ -382,5 +397,18 @@ class TimelineResume {
         
         // Update the timeline
         this.updateTimeline();
+    }
+
+    showJobDetails(job) {
+        // Add location to the details panel if available
+        if (job.location) {
+            const locationElement = document.getElementById('address-display');
+            if (locationElement) {
+                locationElement.textContent = job.location;
+                document.getElementById('location-info').classList.remove('hidden');
+            }
+        } else {
+            document.getElementById('location-info').classList.add('hidden');
+        }
     }
 }

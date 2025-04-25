@@ -250,6 +250,17 @@ button:hover {
   margin-bottom: 8px;
 }
 
+.timeline-location {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.timeline-location::before {
+  display: none;
+}
+
 .timeline-responsibilities {
   font-size: 0.9em;
   line-height: 1.5;
