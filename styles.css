@@ -321,52 +321,75 @@ button:hover {
   border: none;
 }
 
+/* Completely revised icon layout to match the image */
 .card-actions {
   position: absolute;
   top: 10px;
-  right: 10px;
+  right: 35px; /* Position further left to make room for drag handle */
   display: flex;
-  gap: 5px;
+  gap: 15px; /* Increased spacing between icons */
+  z-index: 5;
 }
 
 .edit-btn, .delete-btn {
   background: none;
   border: none;
-  font-size: 16px;
   cursor: pointer;
   padding: 0;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  width: auto;
+  display: inline;
+  margin: 0;
 }
 
-.timeline-content:hover .edit-btn,
-.timeline-content:hover .delete-btn {
-  opacity: 1;
+/* Reset any existing icon styles */
+.edit-btn::before, .delete-btn::before {
+  content: none;
 }
 
-.edit-btn:hover {
-  color: #3498db;
-}
-
-.delete-btn:hover {
-  color: #e74c3c;
-}
-
-.drag-handle {
-  position: absolute;
-  top: 5px;
-  right: 5px;
+/* Use actual icons that match your screenshot */
+.edit-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="black" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>');
   width: 16px;
   height: 16px;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="8" cy="18" r="2"/><circle cx="16" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="16" cy="18" r="2"/></svg>');
-  opacity: 0.5;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* Remove any text content */
+  font-size: 0;
+  color: transparent;
+}
+
+.delete-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="black" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>');
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* Remove any text content */
+  font-size: 0;
+  color: transparent;
+}
+
+/* Position the drag handle with proper spacing */
+.drag-handle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
   cursor: grab;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="4" cy="4" r="1.2" fill="black"/><circle cx="4" cy="8" r="1.2" fill="black"/><circle cx="4" cy="12" r="1.2" fill="black"/><circle cx="12" cy="4" r="1.2" fill="black"/><circle cx="12" cy="8" r="1.2" fill="black"/><circle cx="12" cy="12" r="1.2" fill="black"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.timeline-content:hover .drag-handle {
-  opacity: 0.8;
-}
-
+/* Hover effects */
+.edit-btn:hover,
+.delete-btn:hover,
 .drag-handle:hover {
-  opacity: 1 !important;
+  opacity: 1;
 }
 
 .controls {
