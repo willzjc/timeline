@@ -10,6 +10,7 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
   const timelineElementRef = useRef(null);
+  const timelineElementsRef = useRef(null);
   
   // Initialize the timeline structure
   useEffect(() => {
@@ -26,24 +27,55 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
         parseInt(window.getComputedStyle(containerRef.current).width) - 40 : 1160;
       
       updateTimelineDimensions(containerWidth);
+      updateTimelineHeight();
     };
     
     window.addEventListener('resize', handleResize);
     handleResize(); // Initial call
     
+    // Set up ResizeObserver to monitor content height changes
+    const resizeObserver = new ResizeObserver(() => {
+      updateTimelineHeight();
+    });
+    
+    if (timelineElementRef.current) {
+      resizeObserver.observe(timelineElementRef.current);
+    }
+    
     return () => {
       window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
     };
   }, []);
   
   // Update the timeline whenever jobs change
   useEffect(() => {
     updateTimeline();
+    
+    // Add a small delay to ensure DOM has updated with new content
+    setTimeout(() => {
+      updateTimelineHeight();
+    }, 100);
   }, [jobs]);
   
   // Helper function to update timeline dimensions
   const updateTimelineDimensions = (width) => {
     // Logic to adjust timeline based on width
+  };
+  
+  // Calculate and update timeline height based on actual content
+  const updateTimelineHeight = () => {
+    if (!svgRef.current || !timelineElementRef.current) return;
+    
+    // Get the actual height of the timeline content
+    const elementsHeight = timelineElementRef.current.scrollHeight;
+    const timelineHeight = Math.max(elementsHeight, 300); // Minimum 300px height
+    
+    // Update SVG height
+    d3.select(svgRef.current).attr('height', timelineHeight);
+    
+    // Update timeline line
+    drawTimelineLine(timelineHeight);
   };
   
   // Format date for display
@@ -62,16 +94,10 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
   // Update timeline visualization
   const updateTimeline = () => {
     if (!svgRef.current || !timelineElementRef.current) return;
-    
-    // Calculate timeline height based on content
-    const timelineHeight = Math.max((jobs.length + 1) * 150 + 100, 300);
-    d3.select(svgRef.current).attr('height', timelineHeight);
-    
-    // Update timeline line
-    drawTimelineLine(timelineHeight);
+    updateTimelineHeight();
   };
   
-  // Draw the timeline vertical line
+  // Draw the timeline vertical line with the accurate height
   const drawTimelineLine = (height) => {
     const svg = d3.select(svgRef.current);
     svg.select(".timeline-line").remove();
@@ -82,7 +108,7 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
         .attr("x1", 30)
         .attr("y1", 0)
         .attr("x2", 30)
-        .attr("y2", height);
+        .attr("y2", height - 20); // Slight padding at bottom
     }
   };
   
@@ -114,6 +140,9 @@ function TimelineResume({ onShowMap, jobs, setJobs }) {
     updatedJobs[index] = { ...updatedJobs[index], ...updatedJob };
     setJobs(updatedJobs);
     setEditingIndex(null);
+    
+    // Allow time for DOM to update before recalculating height
+    setTimeout(updateTimelineHeight, 100);
   };
   
   // Cancel editing a job
