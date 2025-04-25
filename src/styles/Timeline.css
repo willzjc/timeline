@@ -61,6 +61,10 @@
   transition: all 0.3s ease;
 }
 
+.timeline-elements .timeline-item:first-child {
+  padding-top: 20px; /* Add padding to the top of the first item */
+}
+
 .timeline-item:last-child {
   margin-bottom: 20px; /* Reduced margin on last item */
 }
@@ -80,6 +84,7 @@
   min-height: 100px;
   display: flex;
   flex-direction: column;
+  border: 1px solid #e0e0e0; /* Add subtle grey border */
 }
 
 .timeline-content:hover {
