@@ -2,7 +2,7 @@
   "name": "timeline",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://YOUR_GITHUB_USERNAME.github.io/timeline",
+  "homepage": "https://willzjc.github.io/timeline",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -41,7 +41,8 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^9.25.1",
+    "eslint": "^8.56.0",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "gh-pages": "^6.3.0"
