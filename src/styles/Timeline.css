@@ -1,4 +1,8 @@
 /* GENERAL TIMELINE CONTAINER AND STRUCTURE */
+:root {
+  --timeline-color: #808080; /* Central variable for timeline colors */
+}
+
 .timeline-container,
 .timeline-resume-container {
   position: relative; /* Needed for absolute positioning of axis */
@@ -24,10 +28,10 @@
   content: '';
   position: absolute;
   left: 30px; /* Center of 60px */
-  width: 3px;
+  width: 2px;
   top: 48px; /* Align with the center of the first dot (40px + 16px/2) */
   bottom: 0;
-  background: linear-gradient(to bottom, #343434 85%, rgba(52, 52, 52, 0));
+  background: linear-gradient(to bottom, var(--timeline-color) 85%, rgba(52, 52, 52, 0));
   transform: translateX(-50%); /* Center the line precisely */
   border-radius: 2px;
 }
@@ -40,7 +44,8 @@
   height: 12px;
   background-color: white;
   border-radius: 50%;
-  border: 2px solid #343434;
+  border: 2px solid var(--timeline-color);
+  box-shadow: 0 0 0 2px white; /* Add white outline outside the black border */
   z-index: 2;
   transition: transform 0.3s ease, left 0.3s ease, top 0.3s ease; /* Add top transition */
 }
