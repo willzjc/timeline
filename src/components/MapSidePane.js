@@ -1,19 +1,9 @@
 import React, { useEffect } from 'react';
-import CONFIG from '../config';
 import '../styles/MapSidePane.css';
 
 function MapSidePane({ location, onClose }) {
-  // Get API key from config file
-  const apiKey = CONFIG?.GOOGLE_MAPS_API_KEY || '';
-
   // If no API key is available, use the keyless embed version
-  const mapSrc = apiKey
-    ? `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(
-        location
-      )}`
-    : `https://maps.google.com/maps?q=${encodeURIComponent(
-        location
-      )}&output=embed`;
+  const mapSrc =  `https://maps.google.com/maps?q=${encodeURIComponent(location)}&output=embed`;
   
   // Add class to body when map is open to enable the side-by-side layout
   useEffect(() => {
